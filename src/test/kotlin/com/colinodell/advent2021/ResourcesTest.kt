@@ -4,13 +4,13 @@
 
 @file:Suppress("RedundantInnerClassModifier", "RedundantInnerClassModifier")
 
-package com.ginsberg.advent2021
+package com.colinodell.advent2021
 
-import com.ginsberg.advent2021.Resources.resourceAsListOfInt
-import com.ginsberg.advent2021.Resources.resourceAsListOfLong
-import com.ginsberg.advent2021.Resources.resourceAsListOfString
-import com.ginsberg.advent2021.Resources.resourceAsString
-import com.ginsberg.advent2021.Resources.resourceAsText
+import com.colinodell.advent2021.Resources.resourceAsListOfInt
+import com.colinodell.advent2021.Resources.resourceAsListOfLong
+import com.colinodell.advent2021.Resources.resourceAsListOfString
+import com.colinodell.advent2021.Resources.resourceAsString
+import com.colinodell.advent2021.Resources.resourceAsText
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested

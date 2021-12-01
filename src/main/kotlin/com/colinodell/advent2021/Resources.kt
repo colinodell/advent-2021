@@ -2,7 +2,7 @@
  * Copyright (c) 2021 by Todd Ginsberg
  */
 
-package com.ginsberg.advent2021
+package com.colinodell.advent2021
 
 import java.io.File
 import java.net.URI
