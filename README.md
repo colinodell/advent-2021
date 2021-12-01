@@ -1,6 +1,7 @@
 ## Advent of Code 2021 Solutions in Kotlin
 
 [![license](https://img.shields.io/github/license/colinodell/advent-2021-kotlin)]()
+[![Build](https://github.com/colinodell/advent-2021-kotlin/actions/workflows/build.yml/badge.svg)](https://github.com/colinodell/advent-2021-kotlin/actions/workflows/build.yml)
 
 This repo is my personal attempt at solving the [Advent of Code 2021](http://adventofcode.com/2021) set of problems with the Kotlin programming language.
 
