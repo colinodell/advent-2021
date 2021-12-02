@@ -10,6 +10,15 @@ class Day02(private val instructions: List<String>) {
         return submarine.position.x * submarine.position.y
     }
 
+    fun solvePart2(): Int {
+        val submarine = Submarine(CorrectStrategy())
+        for (instruction in instructions) {
+            submarine.move(instruction)
+        }
+
+        return submarine.position.x * submarine.position.y
+    }
+
     class Submarine (var movementStrategy: MovementStrategy) {
         var position = Vector2(0, 0)
 
@@ -36,6 +45,26 @@ class Day02(private val instructions: List<String>) {
                 "down" -> Vector2(0, distance)
                 else -> throw IllegalArgumentException("Unknown direction: $direction")
             }
+        }
+    }
+
+    inner class CorrectStrategy : MovementStrategy {
+        private var aim = 0
+
+        override fun move(direction: String, distance: Int): Vector2 {
+            if (direction == "forward") {
+                return Vector2(distance, distance * aim)
+            }
+
+            if (direction == "up") {
+                aim -= distance
+                return Vector2(0, 0)
+            } else if (direction == "down") {
+                aim += distance
+                return Vector2(0, 0)
+            }
+
+            throw IllegalArgumentException("Unknown direction: $direction")
         }
     }
 }

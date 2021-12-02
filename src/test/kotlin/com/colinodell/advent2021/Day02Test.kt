@@ -25,4 +25,20 @@ class Day02Test {
             assertThat(answer).isEqualTo(1451208)
         }
     }
+
+    @Nested
+    @DisplayName("Part 2")
+    inner class Part2 {
+        @Test
+        fun `Matches Sample Data`() {
+            val answer = Day02(sample).solvePart2()
+            assertThat(answer).isEqualTo(900)
+        }
+
+        @Test
+        fun `Matches Actual Data`() {
+            val answer = Day02(resourceAsListOfString("day02.txt")).solvePart2()
+            assertThat(answer).isEqualTo(1620141160)
+        }
+    }
 }
