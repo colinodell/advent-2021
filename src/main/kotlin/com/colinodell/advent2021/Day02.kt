@@ -1,39 +1,26 @@
 package com.colinodell.advent2021
 
 class Day02(private val instructions: List<String>) {
-    fun solvePart1(): Int {
-        val submarine = Submarine(NaiveStrategy())
-        for (instruction in instructions) {
-            submarine.move(instruction)
-        }
-
-        return submarine.position.x * submarine.position.y
-    }
-
-    fun solvePart2(): Int {
-        val submarine = Submarine(CorrectStrategy())
-        for (instruction in instructions) {
-            submarine.move(instruction)
-        }
-
-        return submarine.position.x * submarine.position.y
-    }
+    fun solvePart1(): Int = Submarine(NaiveStrategy()).navigate(instructions)
+    fun solvePart2(): Int = Submarine(CorrectStrategy()).navigate(instructions)
 
     class Submarine (var movementStrategy: MovementStrategy) {
         var position = Vector2(0, 0)
 
-        fun move(instruction: String) {
-            // Split string into direction and distance
-            val split = instruction.split(" ")
-            val direction = split[0]
-            val distance = split[1].toInt()
+        // Moves the submarine according to the instructions and returns the product of the horizontal position and depth
+        fun navigate(instructions: List<String>): Int {
+            for (instruction in instructions) {
+                // Split string into direction and distance
+                val split = instruction.split(" ")
+                position += movementStrategy.move(split[0], split[1].toInt())
+            }
 
-            position += movementStrategy.move(direction, distance)
+            return position.x * position.y
         }
     }
 
     interface MovementStrategy {
-        // Returns a vector representing the change in position
+        // Returns a vector representing the change in horizontal position (x) and depth (y)
         fun move(direction: String, distance: Int): Vector2
     }
 
@@ -52,19 +39,17 @@ class Day02(private val instructions: List<String>) {
         private var aim = 0
 
         override fun move(direction: String, distance: Int): Vector2 {
-            if (direction == "forward") {
-                return Vector2(distance, distance * aim)
+            return when (direction) {
+                "forward" -> Vector2(distance, distance * aim)
+                "up" -> adjustAim(-distance)
+                "down" -> adjustAim(distance)
+                else -> throw IllegalArgumentException("Unknown direction: $direction")
             }
+        }
 
-            if (direction == "up") {
-                aim -= distance
-                return Vector2(0, 0)
-            } else if (direction == "down") {
-                aim += distance
-                return Vector2(0, 0)
-            }
-
-            throw IllegalArgumentException("Unknown direction: $direction")
+        private fun adjustAim(amount: Int): Vector2 {
+            aim += amount
+            return Vector2(0, 0)
         }
     }
 }
