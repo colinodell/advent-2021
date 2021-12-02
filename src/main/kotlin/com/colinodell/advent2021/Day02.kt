@@ -7,12 +7,11 @@ class Day02(private val instructions: List<String>) {
             submarine.move(instruction)
         }
 
-        return submarine.position * submarine.depth
+        return submarine.position.x * submarine.position.y
     }
 
     class Submarine {
-        var position = 0
-        var depth = 0
+        var position = Vector2(0, 0)
 
         fun move(instruction: String) {
             // Split string into direction and distance
@@ -21,9 +20,9 @@ class Day02(private val instructions: List<String>) {
             val distance = split[1].toInt()
 
             when (direction) {
-                "forward" -> position += distance
-                "up" -> depth -= distance
-                "down" -> depth += distance
+                "forward" -> position += Vector2(distance, 0)
+                "up" -> position -= Vector2(0, distance)
+                "down" -> position += Vector2(0, distance)
             }
         }
     }
