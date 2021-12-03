@@ -15,7 +15,7 @@ class Day03 (private val input: List<String>) {
         val gammaRateDecimal = Integer.parseInt(gammaRate, 2)
         // Clever way to find the epsilon rate, since the sum of both rates will always equal
         // one less than the maximum value that can be stored in `bitSize` bits
-        val epsilonRateDecimal = (2 shl bitSize - 1) - gammaRateDecimal - 1
+        val epsilonRateDecimal = (1 shl bitSize) - gammaRateDecimal - 1
 
         return gammaRateDecimal * epsilonRateDecimal
     }
