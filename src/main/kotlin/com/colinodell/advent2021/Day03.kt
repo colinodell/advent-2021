@@ -1,7 +1,7 @@
 package com.colinodell.advent2021
 
 class Day03 (private val input: List<String>) {
-    private val bitSize = input[0].length
+    private val bitSize = input.first().length
 
     fun solvePart1(): Int {
         var gammaRateAsString = (0 until bitSize).concatenationOf { column -> input.mostCommonBit(column) }
@@ -40,8 +40,9 @@ class Day03 (private val input: List<String>) {
         return answer
     }
 
-    private fun List<String>.mostCommonBit(bitPosition: Int): Char {
-        val onesCount = this.count { it[bitPosition] == '1' }
+    // Using input data, return the most common bit at the given column
+    private fun List<String>.mostCommonBit(column: Int): Char {
+        val onesCount = this.count { it[column] == '1' }
         val zeroesCount = this.size - onesCount
 
         return if (onesCount >= zeroesCount) '1' else '0'
