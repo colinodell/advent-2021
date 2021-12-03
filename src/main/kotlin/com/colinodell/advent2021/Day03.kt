@@ -4,6 +4,7 @@ class Day03 (private val input: List<String>) {
     private val bitSize = input.first().length
 
     fun solvePart1(): Int {
+        // For each column / bit-index, figure out the most common bit value, and then concatenate those together
         var gammaRateAsString = (0 until bitSize).concatenationOf { column -> input.mostCommonBit(column) }
 
         // Convert binary string to decimal
@@ -19,7 +20,7 @@ class Day03 (private val input: List<String>) {
         // Set to 1, since we'll be multiplying the answer as we go
         var answer = 1
 
-        // First we operate with the most common bit, then we operate with the least common bit
+        // First we operate with the most common bit, then we operate with the opposite of that (the least common bit)
         for (mostCommon in listOf(true, false)) {
             // Clone the list of numbers
             var numbers = input.toMutableList()
@@ -27,6 +28,7 @@ class Day03 (private val input: List<String>) {
             // At each bit position...
             for (bitPosition in 0 until bitSize) {
                 // Remove all numbers that don't have the desired bit
+                // The `== mostCommon` part is just a clever shortcut to invert the result so we find the least common bit
                 numbers = numbers.filter { (it.get(bitPosition) == numbers.mostCommonBit(bitPosition)) == mostCommon }.toMutableList()
 
                 // Only one number left? It must be our answer
