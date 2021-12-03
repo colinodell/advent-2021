@@ -4,15 +4,10 @@ class Day03 (private val input: List<String>) {
     private val bitSize = input[0].length
 
     fun solvePart1(): Int {
-        var gammaRate = ""
-
-        // Construct a new binary string with the most common bit at each position
-        for (bitPosition in 0 until bitSize) {
-            gammaRate += input.mostCommonBit(bitPosition)
-        }
+        var gammaRateAsString = (0 until bitSize).concatenationOf { column -> input.mostCommonBit(column) }
 
         // Convert binary string to decimal
-        val gammaRateDecimal = Integer.parseInt(gammaRate, 2)
+        val gammaRateDecimal = Integer.parseInt(gammaRateAsString, 2)
         // Clever way to find the epsilon rate, since the sum of both rates will always equal
         // one less than the maximum value that can be stored in `bitSize` bits
         val epsilonRateDecimal = (1 shl bitSize) - gammaRateDecimal - 1
@@ -50,5 +45,14 @@ class Day03 (private val input: List<String>) {
         val zeroesCount = this.size - onesCount
 
         return if (onesCount >= zeroesCount) '1' else '0'
+    }
+
+    // Using the current iterable, execute the given function on each element and concatenate the returned chars into a string
+    private inline fun <T> Iterable<T>.concatenationOf(selector: (T) -> Char): String {
+        var result = ""
+        for (element in this) {
+            result += selector(element)
+        }
+        return result
     }
 }
