@@ -24,7 +24,7 @@ class Day06Test {
         @Test
         fun `Matches Actual Data`() {
             val answer = Day06(resourceAsText("day06.txt")).solvePart1()
-            assertThat(answer).isEqualTo(0)
+            assertThat(answer).isEqualTo(352195)
         }
     }
 
@@ -40,7 +40,7 @@ class Day06Test {
         @Test
         fun `Matches Actual Data`() {
             val answer = Day06(resourceAsText("day06.txt")).solvePart2()
-            assertThat(answer).isEqualTo(0)
+            assertThat(answer).isEqualTo(1600306001288)
         }
     }
 }
