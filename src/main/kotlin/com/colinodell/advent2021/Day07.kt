@@ -3,31 +3,20 @@ package com.colinodell.advent2021
 import kotlin.math.abs
 
 class Day07 (inputString: String) {
-    private val input = inputString.trim().split(",").map { it.toInt() }
+    private val positions = inputString.trim().split(",").map { it.toInt() }.sorted()
 
     fun solvePart1(): Int = calculateOptimalFuelUsed { it }
     fun solvePart2(): Int = calculateOptimalFuelUsed { triangularNumber(it) }
 
+    // Calculates the optimal amount of fuel by evaluating the `cost` function at each possible position.
     private fun calculateOptimalFuelUsed(cost: (Int) -> Int): Int {
-        val min = input.minOrNull()!!
-        val max = input.maxOrNull()!!
+        // Input was pre-sorted to quickly obtain these
+        val min = positions.first()
+        val max = positions.last()
 
-        var bestResult = Int.MAX_VALUE
-
-        // For each possible position, calculate the total fuel required for all crabs.
-        for (candidatePosition in min..max) {
-            // The cost is calculated by passing the distance to the candidate position into the `cost` function.
-            input
-                .map { cost(abs(it - candidatePosition)) }
-                .sum()
-                .let {
-                    if (it < bestResult) {
-                        bestResult = it
-                    }
-                }
+        return (min..max).minOf { candidatePosition ->
+            positions.sumOf { cost(abs(it - candidatePosition)) }
         }
-
-        return bestResult
     }
 
     // Calculate the triangular number for n (see https://oeis.org/A000217)
