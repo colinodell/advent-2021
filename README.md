@@ -15,5 +15,5 @@ Past years, in other languages:
 Based on the initial project setup of https://github.com/tginsberg/advent-2021-kotlin
 Copyright &copy; 2021 by Todd Ginsberg.
 
-All solutions in this repository are originals
+All solutions in this repository are originals unless otherwise noted
 Copyright &copy; 2021 by Colin O'Dell.

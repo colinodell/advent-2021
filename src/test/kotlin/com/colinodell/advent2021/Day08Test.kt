@@ -37,4 +37,20 @@ class Day08Test {
             assertThat(answer).isEqualTo(288)
         }
     }
+
+    @Nested
+    @DisplayName("Part 2")
+    inner class Part2 {
+        @Test
+        fun `Matches Sample Data`() {
+            val answer = Day08(sample).solvePart2()
+            assertThat(answer).isEqualTo(61229)
+        }
+
+        @Test
+        fun `Matches Actual Data`() {
+            val answer = Day08(resourceAsListOfString("day08.txt")).solvePart2()
+            assertThat(answer).isEqualTo(940724)
+        }
+    }
 }
