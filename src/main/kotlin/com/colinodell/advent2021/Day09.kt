@@ -20,18 +20,15 @@ class Day09 (input: List<String>) {
     private fun allNeighborsHigherThan(v: Vector2, height: Int) = heightMap.neighborsOf(v).all { n -> n.value > height }
     private fun findBasinSize(v: Vector2): Int {
         val visited = mutableSetOf<Vector2>()
-        val queue = mutableSetOf(v)
-        var size = 0
+        val queue = mutableListOf(v)
         while (queue.isNotEmpty()) {
-            val current = queue.first()
-            queue.remove(current)
+            val current = queue.removeFirst()
             if (visited.contains(current)) {
                 continue
             }
             visited.add(current)
-            size++
             queue.addAll(heightMap.neighborsOf(current).filter { n -> n.value < 9 }.keys)
         }
-        return size
+        return visited.size
     }
 }
