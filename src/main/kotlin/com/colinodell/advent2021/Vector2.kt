@@ -9,6 +9,13 @@ data class Vector2 (val x: Int, val y: Int) {
     operator fun minus(other: Vector2) = Vector2(x - other.x, y - other.y)
 
     override fun toString() = "($x, $y)"
+
+    fun neighbors() = listOf(
+        Vector2(x - 1, y),
+        Vector2(x + 1, y),
+        Vector2(x, y - 1),
+        Vector2(x, y + 1)
+    )
 }
 
 // A line that is at some multiple of 45 degrees (horizontal, vertical, or diagonal)
@@ -27,4 +34,9 @@ data class Line(val start: Vector2, val end: Vector2) {
     val isHorizontal : Boolean by lazy { start.y == end.y }
     val isVertical : Boolean by lazy { start.x == end.x }
     val isDiagonal : Boolean by lazy { ! (isHorizontal || isVertical) }
+}
+
+typealias Grid<T> = Map<Vector2, T>
+fun <T> Grid<T>.neighborsOf(point: Vector2): Map<Vector2, T> {
+    return point.neighbors().filter { containsKey(it) }.associateWith { get(it)!! }
 }
