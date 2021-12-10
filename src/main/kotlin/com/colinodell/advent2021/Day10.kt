@@ -8,49 +8,36 @@ class Day10 (private val input: List<String>) {
     fun solvePart1() = input.sumOf { syntaxErrorScore(it) }
     fun solvePart2() = input.filter { syntaxErrorScore(it) == 0 }.map { autocompleteScore(it) }.sorted().middle()
 
-    fun syntaxErrorScore(line: String): Int {
+    private fun syntaxErrorScore(line: String): Int {
         val openerQueue = mutableListOf<Char>()
-        for (char in line) {
-            // New openers can be added at any time
-            if (syntax.keys.contains(char)) {
-                openerQueue.add(char)
-                continue
-            }
-
-            // Closers must match the last opener
-            val lastOpener = openerQueue.removeLastOrNull()
-            if (lastOpener == null || syntax[lastOpener] != char) {
-                return syntaxErrorPoints[char]!!
-            }
+        for (char in line) when {
+            // Is this an opener? Those can be added at any time
+            syntax.keys.contains(char) -> openerQueue.add(char)
+            // Otherwise, if this is a closer that doesn't match the last opener, return the error point value
+            syntax[openerQueue.removeLast()] != char -> return syntaxErrorPoints[char]!!
         }
 
         return 0
     }
 
-    fun autocompleteScore(line: String): Long {
+    private fun autocompleteScore(line: String): Long {
         val openerQueue = mutableListOf<Char>()
-        for (char in line) {
-            // New openers can be added at any time
-            if (syntax.keys.contains(char)) {
-                openerQueue.add(char)
-                continue
-            }
-
-            openerQueue.removeLastOrNull()
+        for (char in line) when {
+            syntax.keys.contains(char) -> openerQueue.add(char)
+            else -> openerQueue.removeLastOrNull()
         }
 
         var score: Long = 0
 
         while (!openerQueue.isEmpty()) {
             val lastOpener = openerQueue.removeLast()
-            score *= 5
-            score += autocompletePoints[syntax[lastOpener]]!!
+            score = score * 5 + autocompletePoints[syntax[lastOpener]]!!
         }
 
         return score
     }
 
-    fun <T> List<T>.middle(): T {
+    private fun <T> List<T>.middle(): T {
         val middle = size / 2
         return if (size % 2 == 0) {
             get(middle - 1)
