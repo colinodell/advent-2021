@@ -16,6 +16,13 @@ data class Vector2 (val x: Int, val y: Int) {
         Vector2(x, y - 1),
         Vector2(x, y + 1)
     )
+
+    fun neighborsIncludingDiagonals() = neighbors() + listOf(
+        Vector2(x - 1, y - 1),
+        Vector2(x - 1, y + 1),
+        Vector2(x + 1, y - 1),
+        Vector2(x + 1, y + 1)
+    )
 }
 
 // A line that is at some multiple of 45 degrees (horizontal, vertical, or diagonal)
@@ -39,4 +46,7 @@ data class Line(val start: Vector2, val end: Vector2) {
 typealias Grid<T> = Map<Vector2, T>
 fun <T> Grid<T>.neighborsOf(point: Vector2): Map<Vector2, T> {
     return point.neighbors().filter { containsKey(it) }.associateWith { get(it)!! }
+}
+fun <T> Grid<T>.neighborsIncludingDiagonalsOf(point: Vector2): Map<Vector2, T> {
+    return point.neighborsIncludingDiagonals().filter { containsKey(it) }.associateWith { get(it)!! }
 }
