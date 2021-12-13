@@ -12,7 +12,7 @@ internal object Resources {
         resourceAsListOfString(fileName).reduce { a, b -> "$a$delimiter$b" }
 
     fun resourceAsText(fileName: String): String =
-        File(fileName.toURI()).readText()
+        File(fileName.toURI()).readText().trimEnd('\n')
 
     fun resourceAsListOfString(fileName: String): List<String> =
             File(fileName.toURI()).readLines()
