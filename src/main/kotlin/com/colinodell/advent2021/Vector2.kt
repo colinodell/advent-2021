@@ -50,3 +50,33 @@ fun <T> Grid<T>.neighborsOf(point: Vector2): Map<Vector2, T> {
 fun <T> Grid<T>.neighborsIncludingDiagonalsOf(point: Vector2): Map<Vector2, T> {
     return point.neighborsIncludingDiagonals().filter { containsKey(it) }.associateWith { get(it)!! }
 }
+
+fun Collection<Vector2>.toStringVisualization(): String {
+    val minX = minOf { it.x }
+    val minY = minOf { it.y }
+    val maxX = maxOf { it.x }
+    val maxY = maxOf { it.y }
+
+    val grid = Array(maxY - minY + 1) { Array(maxX - minX + 1) { '.' } }
+
+    for (point in this) {
+        grid[point.y - minY][point.x - minX] = '#'
+    }
+
+    return grid.map { it.joinToString("") }.joinToString("\n")
+}
+
+fun <T> Grid<T>.toStringVisualization(): String {
+    val minX = minOf { it.key.x }
+    val minY = minOf { it.key.y }
+    val maxX = maxOf { it.key.x }
+    val maxY = maxOf { it.key.y }
+
+    val grid = Array(maxY - minY + 1) { Array(maxX - minX + 1) { '.' } }
+
+    for (point in this) {
+        grid[point.key.y - minY][point.key.x - minX] = point.value.toString()[0]
+    }
+
+    return grid.map { it.joinToString("") }.joinToString("\n")
+}

@@ -19,7 +19,7 @@ class Day13 (input: String) {
     }
 
     fun solvePart1() = fold(1).size
-    fun solvePart2() = print(fold(folds.size))
+    fun solvePart2() = fold(folds.size).toStringVisualization()
 
     fun fold(limit: Int = 1): Set<Vector2> {
         val dots = dots.toMutableSet()
@@ -30,14 +30,14 @@ class Day13 (input: String) {
             i++
             when (dir) {
                 'x' -> {
-                    val (toFold, toKeep) = dots.partition { it.x > amount }
-                    dots.removeAll(toFold)
+                    val toFold = dots.filter { it.x > amount }
+                    dots.removeAll(toFold.toSet())
                     toFold.map { it.copy(x = it.x - 2*(it.x - amount)) }.forEach { dots.add(it) }
                 }
                 'y' -> {
-                    val (toFold, toKeep) = dots.partition { it.y > amount }
-                    dots.removeAll(toFold)
-                    toFold.map { it.copy(y = it.y - 2* (it.y - amount)) }.forEach { dots.add(it) }
+                    val toFold = dots.filter { it.y > amount }
+                    dots.removeAll(toFold.toSet())
+                    toFold.map { it.copy(y = it.y - 2*(it.y - amount)) }.forEach { dots.add(it) }
                 }
             }
 
@@ -45,20 +45,5 @@ class Day13 (input: String) {
         }
 
         return dots
-    }
-
-    fun print(points: Set<Vector2>): String {
-        val minX = points.minOf { it.x }
-        val minY = points.minOf { it.y }
-        val maxX = points.maxOf { it.x }
-        val maxY = points.maxOf { it.y }
-
-        val grid = Array(maxY - minY + 1) { Array(maxX - minX + 1) { '.' } }
-
-        for (point in points) {
-            grid[point.y - minY][point.x - minX] = '#'
-        }
-
-        return grid.map { it.joinToString("") }.joinToString("\n")
     }
 }

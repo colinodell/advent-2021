@@ -90,3 +90,49 @@ class LineTest {
         assertThat(line.isDiagonal).isTrue()
     }
 }
+
+@Nested
+@DisplayName("Grid")
+class GridTest {
+    @Test
+    fun `toStringVisualization()`() {
+        val grid: Grid<Char> = mapOf(
+            Pair(Vector2(0, 0), 'a'),
+            Pair(Vector2(2, 0), 'b'),
+            Pair(Vector2(1, 1), 'c'),
+            Pair(Vector2(0, 2), 'd'),
+            Pair(Vector2(2, 2), 'e'),
+        )
+
+        assertThat(grid.toStringVisualization()).isEqualTo(
+            """
+            a.b
+            .c.
+            d.e
+            """.trimIndent()
+        )
+    }
+}
+
+@Nested
+@DisplayName("Vector2 Collection")
+class CollectionTest {
+    @Test
+    fun `toStringVisualization()`() {
+        val collection: Set<Vector2> = setOf(
+            Vector2(0, 0),
+            Vector2(2, 0),
+            Vector2(1, 1),
+            Vector2(0, 2),
+            Vector2(2, 2),
+        )
+
+        assertThat(collection.toStringVisualization()).isEqualTo(
+            """
+            #.#
+            .#.
+            #.#
+            """.trimIndent()
+        )
+    }
+}
