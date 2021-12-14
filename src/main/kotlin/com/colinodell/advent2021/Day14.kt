@@ -2,35 +2,37 @@ package com.colinodell.advent2021
 
 class Day14(input: List<String>) {
     private val template = input[0]
-    private val insertionRules = input.drop(2).map {
-        it.split(" -> ").let { it[0] to it[0][0] + it[1] + it[0][1] }
+    private val insertionRules = input.drop(2).map { line ->
+        line.split(" -> ").let { it[0] to it[0][0] + it[1] + it[0][1] }
     }.toMap()
 
-    fun solvePart1() = polymerize(10).groupingBy { it }.eachCount().let { it.maxOf { it.value } - it.minOf { it.value } }
+    fun solvePart1() = polymerizeAndCalculateAnswer(10)
+    fun solvePart2() = polymerizeAndCalculateAnswer(40)
 
-    fun polymerize(rounds: Int): String {
-        var polymer = template
+    fun polymerizeAndCalculateAnswer(rounds: Int): Long {
+        var polymers = template.windowed(2).groupingBy { it }.eachCount().mapValues { it.value.toLong() }
+
         repeat (rounds) {
-            polymer = polymer.windowed(2).map { insertionRules[it] ?: it }.unwindow()
+            val foo = mutableMapOf<String, Long>()
+            polymers.mapKeys { insertionRules[it.key] ?: it.key }.forEach {
+                it.key.windowed(2).forEach { pair ->
+                    foo[pair] = (foo[pair] ?: 0L) + it.value
+                }
+            }
+
+            polymers = foo
         }
 
-        // Get most frequent letter
-        val counts = polymer.groupingBy { it }.eachCount()
-
-        return polymer
-    }
-
-    fun List<String>.unwindow(): String {
-        val sb = StringBuilder()
-
-        for (i in indices) {
-            if (i == 0) {
-                sb.append(this[i])
-            } else {
-                sb.append(this[i].substring(1))
+        val frequencies = mutableMapOf<Char, Long>()
+        polymers.forEach {
+            it.key.forEach { letter ->
+                frequencies[letter] = (frequencies[letter] ?: 0L) + it.value
             }
         }
 
-        return sb.toString()
+        frequencies[frequencies.keys.first()] = frequencies[frequencies.keys.first()]!! + 1
+        frequencies[frequencies.keys.last()] = frequencies[frequencies.keys.last()]!! + 1
+
+        return (frequencies.maxOf { it.value }!! / 2) - (frequencies.minOf { it.value }!! / 2) + 1
     }
 }
