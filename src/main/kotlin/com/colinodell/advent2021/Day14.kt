@@ -30,9 +30,6 @@ class Day14(input: List<String>) {
             }
         }
 
-        frequencies[frequencies.keys.first()] = frequencies[frequencies.keys.first()]!! + 1
-        frequencies[frequencies.keys.last()] = frequencies[frequencies.keys.last()]!! + 1
-
-        return (frequencies.maxOf { it.value }!! / 2) - (frequencies.minOf { it.value }!! / 2) + 1
+        return (frequencies.maxOf { it.value + 1 }!! / 2) - (frequencies.minOf { it.value + 1 }!! / 2)
     }
 }
