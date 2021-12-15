@@ -42,8 +42,8 @@ class Day15(input: List<String>) {
                 return gScore[current]!!
             }
 
-            for (neighbor in grid.neighborsOf(current).keys) {
-                if (grid[neighbor] == 0) {
+            for (neighbor in current.neighbors()) {
+                if (!grid.containsKey(neighbor) || grid[neighbor] == 0) {
                     continue
                 }
 
