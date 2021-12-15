@@ -51,6 +51,12 @@ fun <T> Grid<T>.neighborsIncludingDiagonalsOf(point: Vector2): Map<Vector2, T> {
     return point.neighborsIncludingDiagonals().filter { containsKey(it) }.associateWith { get(it)!! }
 }
 
+fun <T> Grid<T>.width() = keys.maxOf { it.x } - keys.minOf { it.x } + 1
+fun <T> Grid<T>.height() = keys.maxOf { it.y } - keys.minOf { it.y } + 1
+
+fun <T> Grid<T>.topLeft() = Vector2(keys.minOf { it.x }, keys.minOf { it.y })
+fun <T> Grid<T>.bottomRight() = Vector2(keys.maxOf { it.x }, keys.maxOf { it.y })
+
 fun Collection<Vector2>.toStringVisualization(): String {
     val minX = minOf { it.x }
     val minY = minOf { it.y }
