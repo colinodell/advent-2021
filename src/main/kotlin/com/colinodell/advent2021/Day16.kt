@@ -13,62 +13,54 @@ class Day16(input: String) {
         fun value(): Long
     }
 
-    data class Literal(override val version: Int, val value: Long) : Packet
-    {
-        override fun versionSum(): Int = version
-        override fun value(): Long = value
+    data class Literal(override val version: Int, val value: Long) : Packet {
+        override fun versionSum() = version
+        override fun value() = value
     }
 
-    data class Operator(override val version: Int, val subPackets: List<Packet>, val operation: (List<Packet>) -> Long) : Packet
+    data class Operator(override val version: Int, private val type: Int, val subPackets: List<Packet>) : Packet
     {
-        override fun versionSum(): Int = version + subPackets.sumOf { it.versionSum() }
-        override fun value(): Long = operation(subPackets)
+        override fun versionSum() = version + subPackets.sumOf { it.versionSum() }
+        override fun value() = when (type) {
+            0 -> subPackets.sumOf { it.value() }
+            1 -> subPackets.map { it.value() }.reduce { a, b -> a * b}
+            2 -> subPackets.minOf { it.value() }
+            3 -> subPackets.maxOf { it.value() }
+            5 -> if (subPackets[0].value() > subPackets[1].value()) 1 else 0
+            6 -> if (subPackets[0].value() < subPackets[1].value()) 1 else 0
+            7 -> if (subPackets[0].value() == subPackets[1].value()) 1 else 0
+            else -> throw IllegalArgumentException("Unsupported operator type: $type")
+        }
     }
 
     companion object {
         fun decodePacket(bits: String): Packet = decodePacket(BitString(bits))
 
         private fun decodePacket(bits: BitString): Packet {
-            val version = bits.next(3).toInt(2)
-            val typeId = bits.next(3).toInt(2)
+            val version = bits.takeInt(3)
+            val type = bits.takeInt(3)
 
-            return when (typeId) {
-                0 -> parseOperator(version, bits) { it.sumOf { it.value() }}
-                1 -> parseOperator(version, bits) { it.map { it.value() }.reduce { a, b -> a * b} }
-                2 -> parseOperator(version, bits) { it.minOf { it.value() } }
-                3 -> parseOperator(version, bits) { it.maxOf { it.value() } }
-                4 -> parseLiteral(version, bits)
-                5 -> parseOperator(version, bits) { if (it[0].value() > it[1].value()) 1 else 0 }
-                6 -> parseOperator(version, bits) { if (it[0].value() < it[1].value()) 1 else 0 }
-                7 -> parseOperator(version, bits) { if (it[0].value() == it[1].value()) 1 else 0 }
-                else -> throw IllegalArgumentException("Unknown typeId: $typeId")
+            return when (type) {
+                4 -> Literal(version, parseLiteral(bits))
+                else -> Operator(version, type, parseSubPackets(bits))
             }
         }
 
-        private fun parseLiteral(version: Int, bits: BitString): Literal {
-            var value = ""
+        private fun parseLiteral(bits: BitString): Long {
+            var value = 0L
             do {
-                val isLastNumberGroup = bits.next(1) == "0"
-                value += bits.next(4)
+                val isLastNumberGroup = bits.take(1) == "0"
+                value = value * 16 + bits.takeInt(4)
             } while (!isLastNumberGroup)
 
-            return Literal(version, value.toLong(2))
+            return value
         }
 
-        private fun parseOperator(version: Int, bits: BitString, operation: (List<Packet>) -> Long): Operator {
-            val lengthTypeId = bits.next(1).toInt(2)
-
-            return if (lengthTypeId == 0) {
-                val subPacketsBitLength = bits.next(15).toInt(2)
-                val subPacketBits = bits.subsequence(subPacketsBitLength)
-                val subPackets = mutableListOf<Packet>()
-                while (!subPacketBits.isAtEnd()) {
-                    subPackets.add(decodePacket(subPacketBits))
-                }
-                Operator(version, type, subPackets)
-            } else {
-                val subPacketsCount = bits.next(11).toInt(2)
-                Operator(version, type, (0 until subPacketsCount).map { decodePacket(bits) })
+        private fun parseSubPackets(bits: BitString): List<Packet> {
+            return when (bits.takeInt(1)) {
+                0 -> bits.subsequence(bits.takeInt(15)).whileNotAtEnd { decodePacket(it) }
+                1 -> (0 until bits.takeInt(11)).map { decodePacket(bits) }
+                else -> throw IllegalArgumentException("Unsupported operation length type")
             }
         }
     }
@@ -77,9 +69,8 @@ class Day16(input: String) {
         private var bits = hexString.map { it.digitToInt(16).toString(2).padStart(4, '0') }.joinToString("")
         private var cursor = 0
 
-        fun next(len: Int): String {
-            return bits.substring(cursor, cursor + len).also { cursor += len }
-        }
+        fun take(len: Int) = bits.substring(cursor, cursor + len).also { cursor += len }
+        fun takeInt(len: Int) = take(len).toInt(2)
 
         fun subsequence(len: Int): BitString {
             val sub = bits.substring(cursor, cursor + len)
@@ -87,6 +78,13 @@ class Day16(input: String) {
             return BitString("").apply { bits = sub }.also { cursor += len }
         }
 
-        fun isAtEnd(): Boolean = cursor == bits.length
+        fun <T> whileNotAtEnd(fn: (BitString) -> T): List<T> {
+            val result = mutableListOf<T>()
+            while (cursor != bits.length) {
+                result.add(fn(this))
+            }
+
+            return result
+        }
     }
 }
