@@ -26,25 +26,6 @@ class Day16(input: String) {
     }
 
     companion object {
-        private val hexMap = mapOf(
-            '0' to "0000",
-            '1' to "0001",
-            '2' to "0010",
-            '3' to "0011",
-            '4' to "0100",
-            '5' to "0101",
-            '6' to "0110",
-            '7' to "0111",
-            '8' to "1000",
-            '9' to "1001",
-            'A' to "1010",
-            'B' to "1011",
-            'C' to "1100",
-            'D' to "1101",
-            'E' to "1110",
-            'F' to "1111"
-        )
-
         fun decodePacket(bits: String): Packet = decodePacket(BitString(bits))
 
         private fun decodePacket(bits: BitString): Packet {
@@ -84,16 +65,16 @@ class Day16(input: String) {
                 while (!subPacketBits.isAtEnd()) {
                     subPackets.add(decodePacket(subPacketBits))
                 }
-                Operator(version, subPackets, operation)
+                Operator(version, type, subPackets)
             } else {
                 val subPacketsCount = bits.next(11).toInt(2)
-                Operator(version, (0 until subPacketsCount).map { decodePacket(bits) }, operation)
+                Operator(version, type, (0 until subPacketsCount).map { decodePacket(bits) })
             }
         }
     }
 
     private class BitString(hexString: String) {
-        private var bits = hexString.map { hexMap[it]!! }.joinToString("")
+        private var bits = hexString.map { it.digitToInt(16).toString(2).padStart(4, '0') }.joinToString("")
         private var cursor = 0
 
         fun next(len: Int): String {
