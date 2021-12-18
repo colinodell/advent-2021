@@ -43,6 +43,10 @@ data class Line(val start: Vector2, val end: Vector2) {
     val isDiagonal : Boolean by lazy { ! (isHorizontal || isVertical) }
 }
 
+data class Region(val topLeft: Vector2, val bottomRight: Vector2) {
+    operator fun contains(point: Vector2): Boolean = point.x in topLeft.x..bottomRight.x && point.y in topLeft.y..bottomRight.y
+}
+
 typealias Grid<T> = Map<Vector2, T>
 fun <T> Grid<T>.neighborsOf(point: Vector2): Map<Vector2, T> {
     return point.neighbors().filter { containsKey(it) }.associateWith { get(it)!! }
