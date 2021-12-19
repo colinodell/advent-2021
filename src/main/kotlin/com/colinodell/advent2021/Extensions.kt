@@ -16,3 +16,9 @@ fun <T> Sequence<Pair<T,T>>.includingReversePairs(): Sequence<Pair<T,T>> = seque
         yield(Pair(it.second, it.first))
     }
 }
+
+fun <T,R> T?.ifNotNull(block: (T) -> R) {
+    if (this != null) {
+        block(this)
+    }
+}
