@@ -21,4 +21,19 @@ class Day21Test {
             assertThat(answer).isEqualTo(757770)
         }
     }
+
+    @Nested
+    @DisplayName("Part 2")
+    inner class Part2 {
+        @Test
+        fun `Matches Sample Data`() {
+            assertThat(Day21(4, 8).solvePart2()).isEqualTo(444356092776315)
+        }
+
+        @Test
+        fun `Matches Actual Data`() {
+            val answer = Day21(6, 8).solvePart2()
+            assertThat(answer).isEqualTo(712381680443927)
+        }
+    }
 }
