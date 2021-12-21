@@ -23,6 +23,19 @@ data class Vector2 (val x: Int, val y: Int) {
         Vector2(x + 1, y - 1),
         Vector2(x + 1, y + 1)
     )
+
+    // Unlike the other functions, the order here is important!
+    fun allNeighborsIncludingSelf() = listOf(
+        Vector2(x - 1, y - 1),
+        Vector2(x, y - 1),
+        Vector2(x + 1, y - 1),
+        Vector2(x - 1, y),
+        this,
+        Vector2(x + 1, y),
+        Vector2(x - 1, y + 1),
+        Vector2(x, y + 1),
+        Vector2(x + 1, y + 1)
+    )
 }
 
 // A line that is at some multiple of 45 degrees (horizontal, vertical, or diagonal)
