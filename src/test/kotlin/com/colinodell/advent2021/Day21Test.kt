@@ -12,12 +12,12 @@ class Day21Test {
     inner class Part1 {
         @Test
         fun `Matches Sample Data`() {
-            assertThat(Day21(listOf(4, 8)).solvePart1()).isEqualTo(739785)
+            assertThat(Day21(4, 8).solvePart1()).isEqualTo(739785)
         }
 
         @Test
         fun `Matches Actual Data`() {
-            val answer = Day21(listOf(6, 8)).solvePart1()
+            val answer = Day21(6, 8).solvePart1()
             assertThat(answer).isEqualTo(757770)
         }
     }
