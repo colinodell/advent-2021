@@ -1,16 +1,7 @@
 package com.colinodell.advent2021
 
 class Day09 (input: List<String>) {
-    private val heightMap: Grid<Int>
-
-    init {
-        heightMap = mutableMapOf()
-        for (y in input.indices) {
-            for (x in 0 until input[y].length) {
-                heightMap[Vector2(x, y)] = Character.getNumericValue(input[y][x])
-            }
-        }
-    }
+    private val heightMap = input.toGrid(Character::getNumericValue)
 
     fun solvePart1() = lowestPoints().values.sumOf { it + 1 }
 

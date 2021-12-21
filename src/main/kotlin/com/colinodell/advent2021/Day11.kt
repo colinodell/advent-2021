@@ -1,16 +1,7 @@
 package com.colinodell.advent2021
 
 class Day11 (input: List<String>) {
-    private val grid: Grid<Octopus>
-
-    init {
-        grid = mutableMapOf()
-        for (y in input.indices) {
-            for (x in 0 until input[y].length) {
-                grid[Vector2(x, y)] = Octopus(Character.getNumericValue(input[y][x]))
-            }
-        }
-    }
+    private val grid = input.toGrid { char -> Octopus(Character.getNumericValue(char)) }
 
     fun solvePart1() = (0 until 100).sumOf { runStepAndCountFlashes() }
     fun solvePart2() = generateSequence { runStepAndCountFlashes().takeIf { it != grid.size } }.count() + 1

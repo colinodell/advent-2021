@@ -90,3 +90,11 @@ fun <T> Grid<T>.toStringVisualization(): String {
 
     return grid.map { it.joinToString("") }.joinToString("\n")
 }
+
+fun <T> List<String>.toGrid(transform: (Char) -> T) = mutableMapOf<Vector2, T>().apply {
+    forEachIndexed { y, line ->
+        line.forEachIndexed { x, c ->
+            put(Vector2(x, y), transform(c))
+        }
+    }
+}

@@ -4,16 +4,7 @@ import java.util.PriorityQueue
 import kotlin.math.abs
 
 class Day15(input: List<String>) {
-    private val cavern: Grid<Int>
-
-    init {
-        cavern = mutableMapOf()
-        for (y in input.indices) {
-            for (x in 0 until input[y].length) {
-                cavern[Vector2(x, y)] = Character.getNumericValue(input[y][x])
-            }
-        }
-    }
+    private val cavern = input.toGrid(Character::getNumericValue)
 
     fun solvePart1() = a_star(cavern, cavern.topLeft(), cavern.bottomRight())
     fun solvePart2() = cavern.tile(5).let {
