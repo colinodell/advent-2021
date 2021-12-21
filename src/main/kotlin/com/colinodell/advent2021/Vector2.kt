@@ -61,6 +61,8 @@ data class Region(val topLeft: Vector2, val bottomRight: Vector2) {
 }
 
 typealias Grid<T> = Map<Vector2, T>
+data class GridEntry<V>(override val key: Vector2, override val value: V?) : Map.Entry<Vector2, V?>
+
 fun <T> Grid<T>.neighborsOf(point: Vector2): Map<Vector2, T> {
     return point.neighbors().filter { containsKey(it) }.associateWith { get(it)!! }
 }
@@ -73,6 +75,18 @@ fun <T> Grid<T>.height() = keys.maxOf { it.y } - keys.minOf { it.y } + 1
 
 fun <T> Grid<T>.topLeft() = Vector2(keys.minOf { it.x }, keys.minOf { it.y })
 fun <T> Grid<T>.bottomRight() = Vector2(keys.maxOf { it.x }, keys.maxOf { it.y })
+
+fun <T, O> Grid<T>.mapAllPositions(padding: Int = 0, transform: (GridEntry<T>) -> O): Grid<O> {
+    val grid = mutableMapOf<Vector2, O>()
+
+    (keys.minOf { it.y } - padding .. keys.maxOf { it.y } + padding).forEach { y ->
+        (keys.minOf { it.x } - padding..keys.maxOf { it.x } + padding).forEach { x ->
+            grid[Vector2(x, y)] = transform(GridEntry(Vector2(x, y), this[Vector2(x, y)]))
+        }
+    }
+
+    return grid
+}
 
 fun Collection<Vector2>.toStringVisualization(): String {
     val minX = minOf { it.x }
