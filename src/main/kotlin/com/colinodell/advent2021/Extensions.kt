@@ -22,3 +22,11 @@ fun <T,R> T?.ifNotNull(block: (T) -> R) {
         block(this)
     }
 }
+
+suspend fun <T : Any> SequenceScope<T>.yieldIfNotNull(t: T?) = if (t != null) yield(t) else Unit
+
+fun String.replaceAt(index: Int, char: Char) =
+    this.substring(0, index) + char + this.substring(index + 1)
+
+fun String.replaceAt(index: Int, length: Int, replacement: String) =
+    this.substring(0, index) + replacement + this.substring(index + length)
