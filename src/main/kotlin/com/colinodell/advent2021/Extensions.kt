@@ -23,6 +23,13 @@ fun <T,R> T?.ifNotNull(block: (T) -> R) {
     }
 }
 
+fun <T,R> Iterable<T>?.mapIfNotNull(block: (T) -> R): List<R> {
+    if (this == null) {
+        return emptyList()
+    }
+    return map(block)
+}
+
 suspend fun <T : Any> SequenceScope<T>.yieldIfNotNull(t: T?) = if (t != null) yield(t) else Unit
 
 fun String.replaceAt(index: Int, char: Char) =
